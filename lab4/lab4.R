@@ -10,9 +10,3 @@ thing = function(x,...)
 }
 
 thing(2,...)
-
-MyGa = ga()
-
-
-
-
