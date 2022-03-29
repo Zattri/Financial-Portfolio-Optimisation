@@ -17,10 +17,10 @@ runNSGA <- function(){
   G=nsga2(fn=eval,idim=5,odim=m,lower.bounds=rep(1,D),upper.bounds=rep(1000,D),popsize=20,generations=1:100)
 
   # show best individuals:
-  I=which(G[[100]]$pareto.optimal)
+  I=which(G[[100]]$pareto.optimal) # Finds individuals that have pareto.optimal as TRUE (converged to optimal)
   for(i in I)
   {
-    x=round(G[[100]]$par[i,])
+    x=round(G[[100]]$par[i,]) # x is the real values of each weighting rounded to the nearest integer
     cat(x," f=(",profit(x),",",produced(x),")","\n",sep=" ")
   }
 
@@ -31,8 +31,8 @@ plotNSGA <- function(G){
   I=1:100
   for(i in I)
   { 
-    P=G[[i]]$value # objectives f1 and f2
-    P[,1]=-1*P[,1] # show positive f1 values
+    P = G[[i]]$value # objectives f1 and f2
+    P[,1] = -1 * P[,1] # show positive f1 values - inverting negative profit function to be positive again
     # color from light gray (75) to dark (1):
     COL=paste("gray",round(76-i*0.75),sep="")
     if(i==1) {
