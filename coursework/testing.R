@@ -7,7 +7,7 @@ print(trouble_makers$Name)
 df = df[rowSums(is.na(df)) == 0,] # Remove companies with any null values
 df = df[is.na(df$Price.Earnings) == 0,] # Remove companies that only have null price/earnings
 
-
+table(df$Sector)
 # Mapping sector names to integer values 
 sectors = unique(df$Sector)
 df$sector_index = as.numeric(factor(df$Sector, levels=sectors))
@@ -36,16 +36,17 @@ generateWeighting = function(groups = 11) {
 
 #weightings = c(0,0,0.3,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0) - Example weighting
 
-lowest_price = 10000000000
+lowest_price <<- 10000000000
 for (i in 1:100) {
   weightings = generateWeighting()
   calculated_price = sum_price_per_earnings(data=df, weightings=weightings)
   if (calculated_price <= lowest_price) {
-    best_weighting = weightings
-    lowest_price = calculated_price
+    best_weighting <<- weightings
+    lowest_price <<- calculated_price
     print(lowest_price)
   }
 }
+# Not updating the lowest price properly
 
 # What a great hack, absolute genius, can't believe it, giga chad
 
