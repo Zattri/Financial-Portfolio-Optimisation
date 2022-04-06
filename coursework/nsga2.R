@@ -8,7 +8,7 @@ run_NSGA = function(obj = 2, dim = 11, pop = 20, gen = 100){
       fn=eval,
       idim=D,
       odim=obj,
-      lower.bounds=rep(1,dim),
+      lower.bounds=rep(1,dim), # Might want to make a minimum investment percentage or something?
       upper.bounds=rep(100,dim),
       popsize=pop,
       generations=1:gen)
