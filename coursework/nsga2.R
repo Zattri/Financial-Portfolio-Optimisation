@@ -1,31 +1,32 @@
 library("mco")
 
-source("Bag-Prices.R")
-#ensure package mco is installed and loaded; also ensure that the file "Bag-Prices.R" has been sourced. 
-
-# eval: transform objectives into minimization goal
-eval=function(x) c(-profit(x),produced(x))
-
-runNSGA <- function(){
-  m = 2 #2 objectives: maximise profit, minimise production
-  D=5 # 5 bag prices
-  
-  cat("NSGA-II begins:\n")
-  
-  #minimum value of prices is 1,1,1,1,1, and max is 1000,1000,1000,1000,1000
-  G=nsga2(fn=eval,idim=5,odim=m,lower.bounds=rep(1,D),upper.bounds=rep(1000,D),popsize=20,generations=1:100)
-  
-  # show best individuals:
-  I=which(G[[100]]$pareto.optimal) 
-  for(i in I)
-  {
-    x=round(G[[100]]$par[i,])
-    cat(x," f=(",profit(x),",",produced(x),")","\n",sep=" ")
-  }
-  
-  return (G)
+run_NSGA = function(obj = 2, dim = 11, pop = 20, gen = 100){
+  return(
+    nsga2(
+      constraints=budget_constraint, 
+      cdim=1:dim, 
+      fn=eval,
+      idim=D,
+      odim=obj,
+      lower.bounds=rep(1,dim),
+      upper.bounds=rep(100,dim),
+      popsize=pop,
+      generations=1:gen)
+    )
 }
 
+print_best = function(ga, generation) {
+  # show best individuals:
+  I=which(ga[[generation]]$pareto.optimal) 
+  for(i in I)
+  {
+    x=round(ga[[generation]]$par[i,])
+    cat(x," f=(",sum_price_per_earnings(df, x),",",sum_value_at_risk(df, x),")","\n",sep=" ")
+  }
+}
+
+# --------------------------------------
+# PLOTTING 
 plotNSGA <- function(G){
   I=1:100
   for(i in I)
@@ -46,6 +47,4 @@ plotNSGA <- function(G){
   
 }
 
-# Test runs
-my_ga = runNSGA()
-plotNSGA(my_ga)
+# --------------------------------------
