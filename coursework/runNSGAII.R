@@ -39,6 +39,7 @@ plotNSGA <- function(G){
       plot(P,xlim=c(-500,44000),ylim=c(0,140),xlab="Profit",ylab="Production",cex=0.5,col=COL)
     }
     Pareto=P[G[[i]]$pareto.optimal,]
+    print(Pareto)
     # sort Pareto according to x axis:
     I=sort.int(Pareto[,1],index.return=TRUE)
     Pareto=Pareto[I$ix,]

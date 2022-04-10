@@ -1,8 +1,16 @@
 setwd("C:/Users/Zattri/Desktop/modern_opt/coursework")
 source("objective_functions.R")
 source("nsga2.R")
+source("plotting.R")
 
-my_ga = run_NSGA(2, 11, 20, 100)
+ga = run_NSGA(2, 11, 20, 100)
+plotNSGA(ga, 100)
+
+plot(ga[[100]])
+
+ga_res = ga[[100]]$value
+
+
 plot(my_ga[[1]])
 print_best(my_ga, 1)
 plot(my_ga[[50]])
@@ -10,6 +18,11 @@ print_best(my_ga, 50)
 plot(my_ga[[100]])
 print_best(my_ga, 100)
 
+ga1 = run_NSGA(2, 11, 20, 100)
+ga2 = run_NSGA(2, 11, 8, 100)
+ga3 = run_NSGA(2, 11, 100, 10)
+
+plotbars(ga1, ga2, ga3)
 
 
 # ---------------------------------------------------------------

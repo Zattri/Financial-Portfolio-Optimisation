@@ -1,3 +1,5 @@
+setwd("C:/Users/Zattri/Desktop/modern_opt/lab7")
+
 library("mco")
 source("Bag-Prices.R")
 
@@ -29,8 +31,7 @@ runNSGA <- function(){
 
 plotNSGA <- function(G){
   I=1:100
-  for(i in I)
-  { 
+  for(i in I) { 
     P=G[[i]]$value # objectives f1 and f2
     P[,1]=-1*P[,1] # show positive f1 values
     # color from light gray (75) to dark (1):

@@ -1,4 +1,3 @@
-setwd("C:/Users/Zattri/Desktop/modern_opt/coursework")
 # Read in data for eval function
 df = read.csv("processed_financials.csv")
 
