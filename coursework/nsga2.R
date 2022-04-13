@@ -32,7 +32,7 @@ plotNSGA <- function(ga, gen = 100, xlab="F1", ylab="F2"){
   for(i in I)
   { 
     P = ga[[i]]$value # objectives f1 and f2
-    #P[,1] = -1 * P[,1] # show positive f1 values
+    P[,1] = -1 * P[,1] # show positive f1 values
     # color from light gray (75) to dark (1):
     COL=paste("gray",round(76-i*0.75),sep="")
     if(i==1) {

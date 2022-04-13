@@ -2,7 +2,7 @@
 df = read.csv("processed_financials.csv")
 
 #minimise price per earnings
-price_per_earnings = function(data, weightings){
+price_earnings_ratio = function(data, weightings){
   total_sum = 0
   for (w in weightings) {
     if (w > 0) {
@@ -24,9 +24,9 @@ value_at_risk = function(data, weightings) {
       sector = as.double(which(weightings == w))
       sector_data = data[data$sector_index == sector,]
       week_high = sector_data$X52.Week.High
-      price = sector_data$Price
-      risk_value = sum(price) - sum(week_high)
-      VaR = VaR + (risk_value * w)
+      week_low = sector_data$X52.Week.Low
+      price_variance = sum(week_low) - sum(week_high)
+      VaR = VaR + (price_variance * w)
     }
   }
   
@@ -40,5 +40,5 @@ budget_constraint = function(x) {
 
 # Basic, needs improving
 eval = function(x) {
-  return (c(price_per_earnings(df, x), value_at_risk(df, x))) # minimising cost per earnings and value at risk
+  return (c(-price_earnings_ratio(df, x), value_at_risk(df, x))) # minimising cost per earnings and value at risk
 }
