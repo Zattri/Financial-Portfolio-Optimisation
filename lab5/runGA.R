@@ -1,3 +1,5 @@
+library("ga")
+
 #This function is used by the GA to compute or report the statistics of your interest after every generation.
 #This function overrides the default functionality provided by gaMonitor().
 monitor <- function(obj){
