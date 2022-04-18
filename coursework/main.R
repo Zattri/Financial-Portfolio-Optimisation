@@ -4,18 +4,28 @@ source("nsga2.R")
 source("plotting.R")
 source("mopsocd.R")
 
-mopso = runMOPSO(2, 11, 20, 100)
-plotMOPSO(mopso, "Inverse P/E Ratio", "Value at Risk")
-print(mopso$paramvalues)
+
+
+# MOPSO Results ---------------------------------------------------------------
+mopso = runMOPSO(2, 11, 200, 200)
+plotMOPSO(mopso, mopso$numsols, "Inverse P/E Ratio", "Value at Risk")
+print(mopso$paramvalues[155,])
 print(mopso$numsols)
 
-ga = run_NSGA(2, 11, 20, 100)
-plotNSGA(ga, 100)
 
-plot(ga[[100]])
 
-print_best(ga, 100)
+# NSGA Results ----------------------------------------------------------------
+ga = run_NSGA(2, 11, 200, 200)
+plotNSGA(ga, 200)
 
+plot(ga[[200]]) # This might work better for showing pareto fronts
+print_best(ga, 200)
+
+
+
+
+
+# TESTING AREA ----------------------------------------------------------------
 ga1 = run_NSGA(2, 11, 20, 100)
 ga2 = run_NSGA(2, 11, 8, 100)
 ga3 = run_NSGA(2, 11, 100, 10)
@@ -24,7 +34,7 @@ plotbars(ga1, ga2, ga3)
 
 
 # ---------------------------------------------------------------
-# TESTING FUNCTIONS 
+# BRUTE FORCE METHOD 
 
 generateWeighting = function(groups = 11) {
   V = 100000 # The sum total of all numbers generated

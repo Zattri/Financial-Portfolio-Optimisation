@@ -32,14 +32,13 @@ plotNSGA <- function(G){
   for(i in I)
   { 
     P = G[[i]]$value # objectives f1 and f2
-    P[,1] = -1 * P[,1] # show positive f1 values - inverting negative profit function to be positive again
+    P[,1] = -1 * P[,1] # show positive f1 values
     # color from light gray (75) to dark (1):
     COL=paste("gray",round(76-i*0.75),sep="")
     if(i==1) {
       plot(P,xlim=c(-500,44000),ylim=c(0,140),xlab="Profit",ylab="Production",cex=0.5,col=COL)
     }
     Pareto=P[G[[i]]$pareto.optimal,]
-    print(Pareto)
     # sort Pareto according to x axis:
     I=sort.int(Pareto[,1],index.return=TRUE)
     Pareto=Pareto[I$ix,]
