@@ -3,15 +3,15 @@ library("mco")
 run_NSGA = function(obj = 2, dim = 11, pop = 20, gen = 100){
   return(
     nsga2(
-      constraints=budget_constraint, 
-      cdim=1:dim, 
-      fn=eval,
-      idim=dim,
-      odim=obj,
-      lower.bounds=rep(1,dim), # Might want to make a minimum investment percentage or something?
-      upper.bounds=rep(100,dim),
-      popsize=pop,
-      generations=1:gen)
+      constraints = budget_new, 
+      cdim = 1:dim, 
+      fn = eval,
+      idim = dim,
+      odim = obj,
+      lower.bounds = rep(1,dim), # Might want to make a minimum investment percentage or something?
+      upper.bounds = rep(100,dim),
+      popsize = pop,
+      generations = 1:gen)
     )
 }
 
@@ -21,7 +21,7 @@ print_best = function(ga, generation) {
   for(i in I)
   {
     x=round(ga[[generation]]$par[i,])
-    cat(x," f=(",price_per_earnings(df, x),",",value_at_risk(df, x),")","\n",sep=" ")
+    cat(x," f=(",price_earnings_ratio(df, x),",",value_at_risk(df, x),")","\n",sep=" ")
   }
 }
 
@@ -41,14 +41,11 @@ plotNSGA <- function(ga, gen = 100, xlab="F1", ylab="F2"){
     # Only includes pareto optimal values
     Pareto=P[ga[[i]]$pareto.optimal,]
     # sort Pareto according to x axis:
-    # Tweaked this to only sort if there is more than 1 Pareto element
-    if (length(Pareto) > 2) {
-      I=sort.int(Pareto[,1],index.return=TRUE)
-      Pareto=Pareto[I$ix,]
-    }
+    I=sort.int(Pareto[,1],index.return=TRUE)
+    Pareto=Pareto[I$ix,]
+    lines(Pareto,type="l",cex=0.5,col=COL)
     
     points(P,type="p",pch=1,cex=0.5,col=COL)
-    lines(Pareto,type="l",cex=0.5,col=COL)
   }
   
 }
