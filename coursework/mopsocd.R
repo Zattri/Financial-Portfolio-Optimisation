@@ -1,8 +1,8 @@
 library("mopsocd")
 # Documentation link https://cran.r-project.org/web/packages/mopsocd/mopsocd.pdf
 
-runMOPSO = function(obj = 2, dim = 11, pop = 20, gen = 100, maximise=0) {
-  cat("Running MOPSO")
+runMOPSO = function(obj = 2, dim = 11, pop = 20, gen = 100, maximise=0, mprob=0.5) {
+  cat("Running MOPSO \n")
   return(
     mopsocd(
       fn = eval,
@@ -20,7 +20,8 @@ runMOPSO = function(obj = 2, dim = 11, pop = 20, gen = 100, maximise=0) {
       upperbound = rep(100,dim),
       opt = maximise,
       popsize = pop,
-      maxgen = gen
+      maxgen = gen,
+      pMut=mprob
     )
   )
 }

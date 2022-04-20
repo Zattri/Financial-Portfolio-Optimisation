@@ -3,11 +3,13 @@ source("objective_functions.R")
 source("nsga2.R")
 source("plotting.R")
 source("mopsocd.R")
+#source("GPareto.R")
 
 
 
 # MOPSO Results ---------------------------------------------------------------
-mopso = runMOPSO(2, 11, 200, 200)
+mopso_a = runMOPSO(2, 11, 100, 100, mprob=0.05)
+mopso_b = runMOPSO(2, 11, 100, 100, mprob=0.1)
 plotMOPSO(mopso, mopso$numsols, "Inverse P/E Ratio", "Value at Risk")
 print(mopso$paramvalues[155,])
 print(mopso$numsols)
@@ -15,15 +17,41 @@ print(mopso$numsols)
 
 
 # NSGA Results ----------------------------------------------------------------
-ga = run_NSGA(2, 11, 200, 200)
-plotNSGA(ga, 200)
+nsga_a = run_NSGA(2, 11, 100, 100, cprob=0.8, mprob=0.05)
+nsga_b = run_NSGA(2, 11, 100, 100, cprob=0.95, mprob=0.2)
 
-plot(ga[[200]]) # This might work better for showing pareto fronts
-print_best(ga, 200)
+plotNSGA(nsga, 100, colour=FALSE)
+plot(-nsga[[100]]$value[,1], nsga[[100]]$value[,2])
+plot(paretoFront(nsga[[100]]))
+
+
+plot(nsga[[100]]) # This might work better for showing pareto fronts
+print_best(nsga, 200)
+
+
+
+# GPareto Results (currently using PSO optimizer)  ----------------------------
+pareto_ga = runGPareto(100)
+plot(-pareto_ga$value[,1], pareto_ga$value[,2])
+print(pareto_ga$par)
+plotGPareto(pareto_ga)
 
 
 
 
+# Multi-plot - Kinda works except generation results are very skewed ----------
+#plot(P,main=title,xlab=xlab,ylab=ylab,cex=0.5,col=COL)
+#points(P,type="p",pch=1,cex=0.5,col=COL)
+
+plot(-mopso_a$objfnvalues[,1],mopso_a$objfnvalues[,2], col="red", main="Love you Nat :P", xlab="F1", ylab="F2")
+points(-mopso_b$objfnvalues[,1],mopso_b$objfnvalues[,2], col="black")
+points(-nsga_a[[100]]$value[,1], nsga_a[[100]]$value[,2], col="green")
+points(-nsga_b[[100]]$value[,1], nsga_b[[100]]$value[,2], col="blue")
+legend("topleft", legend=c("MOPSO_a", "MOPSO_b", "NSGA2_a", "NSGA2_b"), 
+       col=c("red", "black", "green", "blue"), fill=c("red", "black", "green", "blue"), cex=0.8)
+
+
+#points(-pareto_ga$value[,1], pareto_ga$value[,2], col="blue")
 
 # TESTING AREA ----------------------------------------------------------------
 ga1 = run_NSGA(2, 11, 20, 100)

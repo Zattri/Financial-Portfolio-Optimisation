@@ -1,6 +1,6 @@
 library("mco")
 
-run_NSGA = function(obj = 2, dim = 11, pop = 20, gen = 100){
+run_NSGA = function(obj = 2, dim = 11, pop = 20, gen = 100, cprob=0.7, mprob=0.2){
   cat("Running NSGA \n")
   return(
     nsga2(
@@ -9,6 +9,8 @@ run_NSGA = function(obj = 2, dim = 11, pop = 20, gen = 100){
       fn = eval,
       idim = dim,
       odim = obj,
+      cprob=cprob,
+      mprob=mprob,
       lower.bounds = rep(1,dim), # Might want to make a minimum investment percentage or something?
       upper.bounds = rep(100,dim),
       popsize = pop,
@@ -28,7 +30,7 @@ print_best = function(ga, generation) {
 
 # --------------------------------------
 # PLOTTING 
-plotNSGA <- function(ga, gen = 100, title="NSGA-II", xlab="F1", ylab="F2") {
+plotNSGA <- function(ga, gen = 100, title="NSGA-II", xlab="F1", ylab="F2", colour=FALSE) {
   cat("Plotting NSGA \n")
   I=1:gen
   for(i in I)
@@ -37,7 +39,9 @@ plotNSGA <- function(ga, gen = 100, title="NSGA-II", xlab="F1", ylab="F2") {
     P[,1] = -1 * P[,1] # show positive f1 values
     # color from light gray (75) to dark (1):
     COL="black"
-    #COL=paste("gray",round(76-(i/2)*0.75),sep="") #i/2 for 200 gen
+    if (colour == TRUE) {
+      COL=paste("gray",round(76-(i/2)*0.75),sep="") #i/2 for 200 gen
+    }
     if(i==1) {
       plot(P,main=title,xlab=xlab,ylab=ylab,cex=0.5,col=COL)
     }
