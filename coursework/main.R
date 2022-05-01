@@ -3,13 +3,11 @@ source("objective_functions.R")
 source("nsga2.R")
 source("plotting.R")
 source("mopsocd.R")
-#source("GPareto.R")
-
 
 
 # MOPSO Results ---------------------------------------------------------------
 mopso_a = runMOPSO(2, 11, 100, 100, mprob=0.05)
-mopso_b = runMOPSO(2, 11, 100, 100, mprob=0.1)
+mopso_b = runMOPSO(2, 11, 100, 100, mprob=0.2)
 plotMOPSO(mopso, mopso$numsols, "Inverse P/E Ratio", "Value at Risk")
 print(mopso$paramvalues[155,])
 print(mopso$numsols)
@@ -20,45 +18,73 @@ print(mopso$numsols)
 nsga_a = run_NSGA(2, 11, 100, 100, cprob=0.8, mprob=0.05)
 nsga_b = run_NSGA(2, 11, 100, 100, cprob=0.95, mprob=0.2)
 
-plotNSGA(nsga, 100, colour=FALSE)
+plotNSGA(nsga_a, 100, colour=TRUE)
 plot(-nsga[[100]]$value[,1], nsga[[100]]$value[,2])
 plot(paretoFront(nsga[[100]]))
 
 
-plot(nsga[[100]]) # This might work better for showing pareto fronts
+plot(nsga_a[[100]]) # This might work better for showing pareto fronts
 print_best(nsga, 200)
 
 
 
-# GPareto Results (currently using PSO optimizer)  ----------------------------
-pareto_ga = runGPareto(100)
-plot(-pareto_ga$value[,1], pareto_ga$value[,2])
-print(pareto_ga$par)
-plotGPareto(pareto_ga)
+# Multi-plot ------------------------------------------------------------------
 
-
-
-
-# Multi-plot - Kinda works except generation results are very skewed ----------
-#plot(P,main=title,xlab=xlab,ylab=ylab,cex=0.5,col=COL)
-#points(P,type="p",pch=1,cex=0.5,col=COL)
-
-plot(-mopso_a$objfnvalues[,1],mopso_a$objfnvalues[,2], col="red", main="Love you Nat :P", xlab="F1", ylab="F2")
+plot(-mopso_a$objfnvalues[,1],mopso_a$objfnvalues[,2], col="red", main="", xlab="F1 - Inverse P/E Ratio", ylab="F2 - Value at Risk")
 points(-mopso_b$objfnvalues[,1],mopso_b$objfnvalues[,2], col="black")
 points(-nsga_a[[100]]$value[,1], nsga_a[[100]]$value[,2], col="green")
 points(-nsga_b[[100]]$value[,1], nsga_b[[100]]$value[,2], col="blue")
 legend("topleft", legend=c("MOPSO_a", "MOPSO_b", "NSGA2_a", "NSGA2_b"), 
        col=c("red", "black", "green", "blue"), fill=c("red", "black", "green", "blue"), cex=0.8)
 
+# NSGA only
+plot(-nsga_a[[100]]$value[,1], nsga_a[[100]]$value[,2], col="green", xlab="F1 - Inverse P/E Ratio", ylab="F2 - Value at Risk")
+points(-nsga_b[[100]]$value[,1], nsga_b[[100]]$value[,2], col="blue")
+legend("topleft", legend=c("NSGA2_a", "NSGA2_b"), 
+       col=c("green", "blue"), fill=c("green", "blue"), cex=0.8)
 
-#points(-pareto_ga$value[,1], pareto_ga$value[,2], col="blue")
+
+
+# Invert for variance ---------------------------------------------------------
+nsga_a[[100]]$value[,1] = -1 * nsga_a[[100]]$value[,1]
+nsga_b[[100]]$value[,1] = -1 * nsga_b[[100]]$value[,1]
+mopso_a$objfnvalues[,1] = -1 * mopso_a$objfnvalues[,1]
+mopso_b$objfnvalues[,1] = -1 * mopso_b$objfnvalues[,1]
+
+# Variance calculations
+var(nsga_a[[100]]$value)
+var(nsga_b[[100]]$value)
+var(mopso_a$objfnvalues)
+var(mopso_b$objfnvalues)
+
+
 
 # TESTING AREA ----------------------------------------------------------------
-ga1 = run_NSGA(2, 11, 20, 100)
-ga2 = run_NSGA(2, 11, 8, 100)
-ga3 = run_NSGA(2, 11, 100, 10)
+# SINGLE PLOT
+singlePlot(convertNSGAdata(nsga_a, objectiveF=1, maximise=TRUE))
+singlePlot(convertMOPSOdata(mopso_a, 1, TRUE), mopso = TRUE)
 
-plotbars(ga1, ga2, ga3)
+
+# COMPARISON PLOT
+comparisonPlot(convertNSGAdata(nsga_a, 1, TRUE), convertMOPSOdata(mopso_a, 1, TRUE))
+comparisonPlot(convertNSGAdata(nsga_a, 2, FALSE), convertMOPSOdata(mopso_a, 2, FALSE))
+
+
+# MULTI PLOT
+ga1 = run_NSGA(2, 11, 20, 100)
+ga2 = run_NSGA(2, 11, 20, 100)
+ga3 = run_NSGA(2, 11, 20, 100)
+
+ga1_obj1 = convertNSGAdata(ga1, objectiveF=1, maximise=TRUE)
+ga2_obj1 = convertNSGAdata(ga2, objectiveF=1, maximise=TRUE)
+ga3_obj1 = convertNSGAdata(ga3, objectiveF=1, maximise=TRUE)
+
+plotbars(ga1_obj1, ga2_obj1, ga3_obj1)
+
+
+
+
+
 
 
 # ---------------------------------------------------------------
