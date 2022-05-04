@@ -1,9 +1,9 @@
 library("mco")
 
-run_NSGA = function(obj = 2, dim = 11, pop = 20, gen = 100, cprob=0.7, mprob=0.2){
-  cat("Running NSGA \n")
+run_nsga2 = function(obj = 2, dim = 11, pop = 20, gen = 100, cprob=0.7, mprob=0.2){
+  cat("Running NSGA-2 \n")
   return(
-    nsga2(
+    mco::nsga2(
       constraints = budget_new, 
       cdim = 1:dim, 
       fn = eval,
