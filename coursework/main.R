@@ -4,6 +4,7 @@ source("nsga2.R")
 source("nsga3.R")
 source("plotting.R")
 source("mopsocd.R")
+set.seed(1234)
 
 
 # MOPSO Results ---------------------------------------------------------------
@@ -30,7 +31,7 @@ print_best(nsga, 200)
 
 # NSGA-3 Results ---------------------------------------------------------------
 # Only uses 2 weighting allocations not 11 because fucking R libraries
-nsga_3 = run_nsga3(2, 2, 100, 100, cprob=0.8, mprob=0.05, summarise=FALSE)
+nsga_3 = run_nsga3(2, 2, 100, 100, cprob=0.8, mprob=0.05, summarise=TRUE)
 nsga_3@fitness
 nsga_3@summary
 
@@ -59,8 +60,13 @@ mopso$objfnvalues[,1] = -1 * mopso_a$objfnvalues[,1]
 
 # Variance calculations
 var(nsga_2[[100]]$value)
-var(mopso$objfnvalues)
 var(nsga_3@fitness)
+var(mopso$objfnvalues)
+
+# Minimum / Max / Mean of f1 and f2 - 100th gen
+mean(nsga_2[[100]]$value[,2])
+mean(nsga_3@fitness[,2])
+mean(mopso$objfnvalues[,2])
 
 
 
