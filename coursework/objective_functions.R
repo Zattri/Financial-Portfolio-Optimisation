@@ -38,9 +38,7 @@ budget_constraint = function(x) {
   return(c(sum(x) - 100))
 }
 
-budget_new = function(x) {
-  return(c(100 - sum(x)))
-}
+budget_new = function(x) { 100 - sum(x) }
 
 eval = function(x) {
   return (c(-price_earnings_ratio(df, x), value_at_risk(df, x))) # minimising cost per earnings and value at risk
